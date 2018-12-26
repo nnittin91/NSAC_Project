@@ -1,0 +1,31 @@
+QEMU
+----
+
+qemu-system-x86_64 -s -m 4096 -hda ~/Downloads/debian_wheezy_i386_standard.qcow2 -kernel /boot/vmlinuz-3.13.6 -append "root=/dev/sda1" -hdd /mnt/tmpfs/100M.img -enable-kvm
+
+TMPFS
+-----
+
+sudo mount -t tmpfs -o size=4400M tmpfs /mnt/tmpfs
+
+QEMU IMAGE
+----------
+
+qemu-img create -f qcow2 /mnt/tmpfs/4G.img 4G
+
+CREATE DATALAIR VOLUME
+----------------------
+
+dmsetup create dev_pub --table "0 40960 chen /dev/sdb1 dev1 dev1_public_one PUBLIC PUBLIC_PRIVATE 5120"
+dmsetup create dev_hid --table "0 40960 chen /dev/sdb1 dev1 dev1_private_one PRIVATE PUBLIC_PRIVATE 5120"
+
+The VOLUME PATH
+---------------
+
+/dev/mapper/dev_pub
+/dev/mapper/dev_hid
+
+MAKE FILESYSTEM
+---------------
+
+mkfs.ext4 /dev/mapper/**
